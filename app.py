@@ -13,3 +13,6 @@ def ml_demo():
 @app.route('/algorithm-demo', methods=['GET', 'POST'])
 def algorithm_demo():
     return render_template('algorithm_demo.html')
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)

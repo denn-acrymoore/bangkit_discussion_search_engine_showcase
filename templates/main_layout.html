@@ -44,22 +44,38 @@
   <div class="container mt-4">
 
     <!-- Search Query Form -->
-    <div class="row mb-5">
+    <div class="row mb-4">
         <div class="col-md-1"></div>
         <div class="col-md-10">
           <form action="{% block form_action %}{% endblock %}" method="post">
             <div class="form-group">
                 <label for="query">Search</label>
                 <input type="text" class="form-control" id="query" name="query"
-                  placeholder="Masukkan kata kunci disini...">
+                  placeholder="Masukkan kata kunci disini..." value="{{ query }}">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         </div>
     </div>
 
-    <!-- Cards of Dummy Data -->
+    {% if preprocessed_query_list %}
+    <!-- Alert for Pre-Processed Search Query -->
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <b>Pre-Processed Search Query:</b> <br> 
+          {{ " ".join(preprocessed_query_list) }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
     {% if discussions %}
+    <!-- Cards of Dummy Data -->
     {% for discussion in discussions %}
     <div class="row mb-3">
       <div class="col-md-1"></div>

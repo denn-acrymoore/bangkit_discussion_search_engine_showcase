@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, redirect, request
 import json
 import os
+import re
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
@@ -14,7 +15,12 @@ def ml_demo():
         return render_template('ml_demo.html', discussions=dummy_data)
 
     if request.method == 'POST':
-        pass
+        query = request.form['query']
+        query_list = preprocess_text_data(query)
+        return render_template('algorithm_demo.html', 
+                                query=query,
+                                discussions=dummy_data,
+                                preprocessed_query_list=query_list)
 
 @app.route('/algorithm-demo', methods=['GET', 'POST'])
 def algorithm_demo():
@@ -22,7 +28,12 @@ def algorithm_demo():
         return render_template('algorithm_demo.html', discussions=dummy_data)
 
     if request.method == 'POST':
-        pass
+        query = request.form['query']
+        query_list = preprocess_text_data(query)
+        return render_template('algorithm_demo.html', 
+                                query=query,
+                                discussions=dummy_data,
+                                preprocessed_query_list=query_list)
 
 def init_dummy_data():
     # Get the JSON Path:
@@ -36,6 +47,14 @@ def init_dummy_data():
         dummy_data = json.load(file)
 
     return dummy_data
+
+def preprocess_text_data(query):
+    preprocessed_query = query.lower()
+    
+    regex = r"\b[a-z]+\b"
+    preprocessed_query_list = re.findall(regex, preprocessed_query)
+
+    return preprocessed_query_list
 
 if __name__ == "__main__":
     # Initialize the JSON dummy data:

@@ -1,4 +1,4 @@
-# Bangkit 2022 x Dicoding Discussion Search Engine Optimization (Company-based Capstone Project)
+# Bangkit 2022 x Dicoding Discussion Search Engine Optimization Showcase (Company-based Capstone Project)
 
 ## Team Members (Team 3):
 - Denn Sebastian Emmanuel - M2271F2345

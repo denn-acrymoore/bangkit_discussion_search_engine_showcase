@@ -19,6 +19,7 @@ demonstration of the final result of this Capstone Project.
 - TensorFlow v2.8.x
 - Flask v2.0.x
 - Sastrawi v1.0.1
+- nltk v3.7
 
 ## How to Run these Code:
 Run the `app.py` file using Python Environment containing the above requirement. 

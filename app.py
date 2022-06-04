@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, redirect, request
 import json
 import os
 import re
+import pandas as pd
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
@@ -36,16 +37,26 @@ def algorithm_demo():
                                 preprocessed_query_list=query_list)
 
 def init_dummy_data():
-    # Get the JSON Path:
+    # Get the Excel Path:
     # NOTE: __file__ is the absolute path of this app.py
     # NOTE: os.pardir is the parent directory (..)
-    json_path = os.path.join(__file__, os.pardir, "discussion_dummy_data.json")
-    print(json_path)
+    dummy_path = os.path.join(__file__, os.pardir, "discussion_dummy_data.xlsx")
+    print("Excel Path:", dummy_path, end="\n\n")
 
-    # Open the JSON Dummy Data:
-    with open(json_path, 'r') as file:
-        dummy_data = json.load(file)
+    # Open the Excel Dummy Data as Pandas DataFrame:
+    dummy_data_df = pd.read_excel(dummy_path)
+    print(dummy_data_df.head(), end="\n\n")
 
+    # Convert Pandas DataFrame into Python List of Dictionaries:
+    dummy_data = dummy_data_df.to_dict(orient='records')
+
+    # Convert all keywords into list:
+    regex = r"\b[a-z]+\b"
+    for data in dummy_data:
+        data['keywords'] = re.findall(regex, data['keywords'])
+
+    print(dummy_data, end="\n\n")
+    
     return dummy_data
 
 def preprocess_text_data(query):

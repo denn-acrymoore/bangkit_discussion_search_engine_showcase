@@ -37,6 +37,8 @@ def algorithm_demo():
                                 preprocessed_query_list=query_list)
 
 def init_dummy_data():
+    """Read the dummy data and convert it into a list of objects"""
+
     # Get the Excel Path:
     # NOTE: __file__ is the absolute path of this app.py
     # NOTE: os.pardir is the parent directory (..)
@@ -60,6 +62,8 @@ def init_dummy_data():
     return dummy_data
 
 def preprocess_text_data(query):
+    """Process the text data and output a list of each processed words"""
+
     preprocessed_query = query.lower()
     
     regex = r"\b[a-z]+\b"

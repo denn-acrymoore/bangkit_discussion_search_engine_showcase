@@ -42,9 +42,25 @@ def ml_onenum_demo():
         if not preprocessed_query:
             return render_template('ml_onenum_demo.html', discussions=dummy_data)
 
+        # Convert the query into onenum data
+        onenum_query = onenum_lstm_model.predict([preprocessed_query])[0]
+
+        # Create a deep copy of the dummy_data
+        dummy_data_copy = copy.deepcopy(dummy_data)
+
+        # Predict the relevancy of each discussion data
+        for data in dummy_data_copy:
+            input_data = np.append(data['onenum_value'], onenum_query)
+            input_data = np.expand_dims(input_data, axis=0)
+            prediction = onenum_dense_model.predict(input_data)[0]
+            # data['relevant'] = prediction
+            data['relevant'] = true_binary_prediction_converter(prediction)
+
+        print(dummy_data_copy)
+
         return render_template('ml_onenum_demo.html', 
                                 query=query,
-                                discussions=dummy_data,
+                                discussions=dummy_data_copy,
                                 preprocessed_query=preprocessed_query)
 
 @app.route('/ml-multinum-demo', methods=['GET', 'POST'])
@@ -148,13 +164,20 @@ def init_dummy_data():
     for data in dummy_data:
         data['keywords'] = re.findall(regex, data['keywords'])
         data['multinum_value'] = np.array(convert_stringlist_to_list(data['multinum_value']))
+        data['onenum_value'] = np.array(data['onenum_value'])
         data['relevant'] = 1
     
     return dummy_data
 
 def init_onenum_models():
     """Load the One-Num Models (Untrained LSTM and Trained Dense Models)"""
-    pass
+    LSTM_MODEL_PATH = os.path.join(__file__, os.pardir, "one_num_untrained_LSTM_model_v1")
+    DENSE_MODEL_PATH = os.path.join(__file__, os.pardir, "one_num_trained_dense_model_v1")
+
+    onenum_lstm_model = tf.keras.models.load_model(LSTM_MODEL_PATH)
+    onenum_dense_model = tf.keras.models.load_model(DENSE_MODEL_PATH)
+
+    return onenum_lstm_model, onenum_dense_model
 
 def init_multinum_models():
     """Load the Multi-Num Models (Untrained LSTM and Trained Dense Models)"""
@@ -218,7 +241,7 @@ if __name__ == "__main__":
     dummy_data = init_dummy_data()
 
     # Initialize the onenum models:
-    # TODO: Add onenum models initialization
+    onenum_lstm_model, onenum_dense_model = init_onenum_models()
 
     # Initialize the multinum models:
     multinum_lstm_model, multinum_dense_model = init_multinum_models()

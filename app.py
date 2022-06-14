@@ -30,10 +30,18 @@ def ml_onenum_demo():
 
     if request.method == 'POST':
         query = request.form['query']
+        
+        # Return if query is empty
         if not query:
             return render_template('ml_onenum_demo.html', discussions=dummy_data)
 
+        # Preprocess the query
         preprocessed_query = preprocessing(query)
+
+        # Return if preprocessed query is empty
+        if not preprocessed_query:
+            return render_template('ml_onenum_demo.html', discussions=dummy_data)
+
         return render_template('ml_onenum_demo.html', 
                                 query=query,
                                 discussions=dummy_data,
@@ -47,11 +55,17 @@ def ml_multinum_demo():
 
     if request.method == 'POST':
         query = request.form['query']
+
+        # Return if query is empty
         if not query:
             return render_template('ml_multinum_demo.html', discussions=dummy_data)
 
         # Preprocess the query
         preprocessed_query = preprocessing(query)
+
+        # Return if preprocessed query is empty
+        if not preprocessed_query:
+            return render_template('ml_multinum_demo.html', discussions=dummy_data)
 
         # Convert the query into multinum data
         multinum_query = multinum_lstm_model.predict([preprocessed_query])[0]
@@ -80,10 +94,18 @@ def algorithm_demo():
 
     if request.method == 'POST':
         query = request.form['query']
+
+        # Return if query is empty
         if not query:
             return render_template('algorithm_demo.html', discussions=dummy_data)
 
+        # Preprocess the query
         preprocessed_query = preprocessing(query)
+
+        # Return if preprocessed query is empty
+        if not preprocessed_query:
+            return render_template('algorithm_demo.html', discussions=dummy_data)
+
         return render_template('algorithm_demo.html', 
                                 query=query,
                                 discussions=dummy_data,

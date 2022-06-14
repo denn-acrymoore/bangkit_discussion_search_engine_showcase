@@ -7,11 +7,19 @@
 
 ## About this Project:
 This is a Python Flask source code that's used to showcase the optimization of 
-Dicoding's Discussion Search Engine Capstone Project by our team, which is the one of the 
+Dicoding's Discussion Search Engine by our team, which is the one of the 
 requirement needed to pass Kampus Merdeka's Bangkit Academy 2022 program.
+  
+This showcase will be separated into 3 demo: ML One-Num Demo, ML Multi-Num Demo, and Algorithm Demo. 
+  
+Both ML One-Num and ML Multi-Num use two models, an `untrained LSTM model` and a `trained Dense model`. The `untrained LSTM model` will convert the `preprocessed discussion data` and `preprocessed search query data` into numerical values. These two values will then be fed into the `trained Dense model` to determine if they are relevant or not (only relevant discussion data will be shown in the page). The only difference between ML One-Num and ML Multi-Num is the number of numerical values outputted by the untrained LSTM model:
+- ML One-Num: 1 numerical output from `untrained LSTM model` -> 2 numerical data fed into `trained Dense model`.
+- ML Multi-Num: 128 numerical output from `untrained LSTM model` -> 256 numerical data fed into `trained Dense model`.
 
-This source code won't go into detail about the development process of the algorithm and 
-the Machine Learning model used in this demonstration. This source code is purely made for 
+The Algorithm Demo will showcase the use of TF-IDF algorithm as a search algorithm. This algorithm will sort the discussion data based on its relevancy to the search query.
+
+## Note:
+This source code won't go into detail about the development process of the algorithm and Machine Learning model used in this demonstration, or the data processing steps. This source code is purely made for 
 demonstration of the final result of this Capstone Project.
 
 ## Minimum Requirement to Run These Code (This may change during development):
@@ -19,7 +27,9 @@ demonstration of the final result of this Capstone Project.
 - TensorFlow v2.8.x
 - Flask v2.0.x
 - Sastrawi v1.0.1
-- nltk v3.7
+- nltk v3.7 or above
+- Pandas v1.4.2 or above
+- Numpy v1.21.5 or above
 
 ## How to Run these Code:
 Run the `app.py` file using Python Environment containing the above requirement. 

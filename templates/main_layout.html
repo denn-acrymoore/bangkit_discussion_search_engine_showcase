@@ -28,8 +28,13 @@
         <div class="navbar-nav mr-auto">
           <a 
             class="nav-item nav-link" 
-            href="{{ url_for('ml_demo') }}">
-              <button type="button" class="btn btn-outline-primary">ML Demo</button> 
+            href="{{ url_for('ml_onenum_demo') }}">
+              <button type="button" class="btn btn-outline-primary">ML One-Num Demo</button> 
+          </a>
+          <a 
+            class="nav-item nav-link" 
+            href="{{ url_for('ml_multinum_demo') }}">
+              <button type="button" class="btn btn-outline-warning">ML Multi-Num Demo</button> 
           </a>
           <a 
             class="nav-item nav-link" 
@@ -59,14 +64,14 @@
         </div>
     </div>
 
-    {% if preprocessed_query_list %}
+    {% if preprocessed_query %}
     <!-- Alert for Pre-Processed Search Query -->
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
           <b>Pre-Processed Search Query:</b> <br> 
-          {{ " ".join(preprocessed_query_list) }}
+          {{ preprocessed_query }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       </div>
@@ -76,22 +81,24 @@
     {% if discussions %}
     <!-- Cards of Dummy Data -->
     {% for discussion in discussions %}
-    <div class="row mb-3">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <div class="card border-success">
-          <h5 class="card-header text-white bg-success">{{ discussion['title'] }}</h5>
-          <div class="card-body">
-            <p class="card-text">
-              {{ discussion['content'] }}
-            </p>
+      {% if discussion['relevant'] == 1 %}
+      <div class="row mb-3">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="card border-success">
+            <h5 class="card-header text-white bg-success">{{ discussion['title'] }}</h5>
+            <div class="card-body">
+              <p class="card-text">
+                {{ discussion['content'] }}
+              </p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{ ', '.join(discussion['keywords']) }}</li>
+            </ul>
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ ', '.join(discussion['keywords']) }}</li>
-          </ul>
         </div>
       </div>
-    </div>
+      {% endif %}
     {% endfor %}
     {% endif %}
 

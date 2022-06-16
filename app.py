@@ -1,3 +1,4 @@
+from multiprocessing import dummy
 from flask import Flask, render_template, url_for, redirect, request
 import tensorflow as tf
 import numpy as np
@@ -14,6 +15,8 @@ nltk.download('omw-1.4')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import linear_kernel
 
 
 """ Flask Related Functions """
@@ -122,9 +125,12 @@ def algorithm_demo():
         if not preprocessed_query:
             return render_template('algorithm_demo.html', discussions=dummy_data)
 
+        # Do the Cosine Similarity Search (TF-IDF)
+        result = cosine_sim_search(preprocessed_query)
+
         return render_template('algorithm_demo.html', 
                                 query=query,
-                                discussions=dummy_data,
+                                discussions=result,
                                 preprocessed_query=preprocessed_query)
 
 
@@ -143,8 +149,39 @@ def true_binary_prediction_converter(np_array):
     else:
         return 0
 
+def cosine_sim_search(preprocessed_query):
+    # Regular expression to get the index of the document in dataset that matches the title
+    idx = None
+    for curr_idx, data in enumerate(dummy_data):
+        if re.search(preprocessed_query, data['combined_processed']):
+            idx = curr_idx
+            break
+
+    # Check if idx = None, return empty list (no result)
+    if idx == None:
+        return []
+
+    #Get the pairwise similarity scores of all document in the dataset with the title
+    sim_scores = list(enumerate(cosine_sim[idx]))
+
+    #Sort the document based on the similarity score
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+
+    #Get the scores of the 10 most similar documents
+    above_threshold = []
+    for idx, score in sim_scores:
+        if score >= 0.1:
+            above_threshold.append((idx, score))
+
+    #Get the indices of the documents
+    dummy_data_indices = [i[0] for i in above_threshold]
+
+    result = [dummy_data[idx] for idx in dummy_data_indices]
+
+    return result
+
 """ Initialization Functions """
-def init_dummy_data():
+def init_dummy_data_and_cosine_similarity():
     """Read the dummy data and convert it into a list of objects"""
 
     # Get the Excel Path:
@@ -157,6 +194,30 @@ def init_dummy_data():
     dummy_data_df = pd.read_excel(DUMMY_PATH)
 
     # Convert Pandas DataFrame into Python List of Dictionaries [{column -> value}, ...]:
+    """
+    [
+        {
+            'title': title row 1, 
+            'content': content row 1,
+            'keywords': keywords row 1,
+            'combined': combined row 1,
+            'combined_processed': combined_processed row 1,
+            'onenum_value': onenum_value row 1,
+            'multinum_value': multinum_value row 1,
+
+        },
+        {
+            'title': title row 2, 
+            'content': content row 2,
+            'keywords': keywords row 2,
+            'combined': combined row 2,
+            'combined_processed': combined_processed row 2,
+            'onenum_value': onenum_value row 2,
+            'multinum_value': multinum_value row 2,
+        },
+        ...
+    ]
+    """
     dummy_data = dummy_data_df.to_dict(orient='records')
 
     # Convert all keywords into list:
@@ -167,7 +228,14 @@ def init_dummy_data():
         data['onenum_value'] = np.array(data['onenum_value'])
         data['relevant'] = 1
     
-    return dummy_data
+    # Initialize TfidfVectorizer:
+    tfidf = TfidfVectorizer()
+    tfidf_matrix = tfidf.fit_transform(dummy_data_df['combined_processed'])    
+
+    # Initialize Cosine Similarities:
+    cosine_sim = linear_kernel(tfidf_matrix, tfidf_matrix)
+
+    return dummy_data, cosine_sim
 
 def init_onenum_models():
     """Load the One-Num Models (Untrained LSTM and Trained Dense Models)"""
@@ -238,7 +306,7 @@ def preprocessing(sentence):
 """ Main Function """
 if __name__ == "__main__":
     # Initialize the dummy data:
-    dummy_data = init_dummy_data()
+    dummy_data, cosine_sim = init_dummy_data_and_cosine_similarity()
 
     # Initialize the onenum models:
     onenum_lstm_model, onenum_dense_model = init_onenum_models()

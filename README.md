@@ -30,6 +30,7 @@ demonstration of the final result of this Capstone Project.
 - nltk v3.7 or above
 - Pandas v1.4.2 or above
 - Numpy v1.21.5 or above
+- Scikit-Learn v1.0.2 or above
 
 ## How to Run these Code:
 Run the `app.py` file using Python Environment containing the above requirement. 

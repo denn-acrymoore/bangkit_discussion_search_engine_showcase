@@ -1,4 +1,3 @@
-from multiprocessing import dummy
 from flask import Flask, render_template, url_for, redirect, request
 import tensorflow as tf
 import numpy as np

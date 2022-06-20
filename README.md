@@ -36,3 +36,14 @@ demonstration of the final result of this Capstone Project.
 Run the `app.py` file using Python Environment containing the above requirement. 
 After that, go to the website link provided by `app.py` in the terminal 
 (defaults to `http://127.0.0.1:5000/`).
+
+## Result (One-Num Model):
+**Note: The One-Num Models' architectures are too small to give any meaningful prediction.**
+  
+![one_num_gif](https://drive.google.com/uc?export=view&id=1b8ANLyrS8UrInNmX4Ej7jg0JX9ojhPqF)
+
+## Result (Multi-Num Model):
+![multi_num_gif](https://drive.google.com/uc?export=view&id=1jJqW9Oaj5jWzRp79hVJnPrZd6aA5akQw)
+
+## Result (TF-IDF Algorithm):
+![tf-idf_gif](https://drive.google.com/uc?export=view&id=1lY4jkrmoYZWyu_JetbhaX6_Wn_SmHgFE)

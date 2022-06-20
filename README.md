@@ -43,7 +43,11 @@ After that, go to the website link provided by `app.py` in the terminal
 ![one_num_gif](https://drive.google.com/uc?export=view&id=1b8ANLyrS8UrInNmX4Ej7jg0JX9ojhPqF)
 
 ## Result (Multi-Num Model):
+**Note: Due to time constraint, the Multi-Num Dense Model's training only uses a subset of the total dataset. So, the model's accuracy may not be perfect.**
+
 ![multi_num_gif](https://drive.google.com/uc?export=view&id=1jJqW9Oaj5jWzRp79hVJnPrZd6aA5akQw)
 
 ## Result (TF-IDF Algorithm):
+**Note: This algorithm will find the first discussion that contains the search query and show all discussions relevant to that specific discussion. Order of words in the search query matters ("error database" yields no result, but "database" and "database error" yield results)**
+
 ![tf-idf_gif](https://drive.google.com/uc?export=view&id=1lY4jkrmoYZWyu_JetbhaX6_Wn_SmHgFE)

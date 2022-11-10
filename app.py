@@ -263,7 +263,7 @@ def preprocessing(sentence):
     sentence = re.sub(CLEANR, ' ', sentence)
 
     # Remove number
-    sentence = re.sub(r"\d+", "", sentence)
+    sentence = re.sub(r"\d+", " ", sentence)
 
     # Case folding
     sentence = sentence.lower()
